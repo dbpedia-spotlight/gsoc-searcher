@@ -1,0 +1,3 @@
+<http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=GSoC2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/tianocore/doap> .
+<http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=GDCM_Summer_of_Code_2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/gdcm/doap> .
+
