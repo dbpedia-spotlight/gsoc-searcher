@@ -1,3 +1,7 @@
 <http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=GSoC2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/tianocore/doap> .
 <http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=GDCM_Summer_of_Code_2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/gdcm/doap> .
-
+<http://wiki.wesnoth.org/SummerOfCodeIdeas> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/wesnoth/doap> .
+<http://brlcad.org/wiki/Google_Summer_of_Code/Project_Ideas> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/brlcad/doap> .
+<http://wiki.apertium.org/wiki/Ideas_for_Google_Summer_of_Code> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/apertium/doap> .
+<http://www.stellarium.org/wiki/index.php/Google_Summer_of_Code_2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/stellarium4java/doap> .
+<http://www.stellarium.org/wiki/index.php/Google_Summer_of_Code_2012> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://sourceforge.net/api/project/name/stellarium/doap> .
