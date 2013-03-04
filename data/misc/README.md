@@ -35,6 +35,10 @@ The current links were manually created. Ohloh provides an API, but it is
 limited, and only allows searching for projects based on name, description, 
 and tags, so query by homepage is not possible. 
 
+Also, Ohloh have recently added support for organisations (e.g., 
+[Apache](https://www.ohloh.net/orgs/apache)) which is not currently supported
+by RDFohloh.
+
 ### dbpedia-debian.nt
 
 This is a set of links to Debian's [RDF Interface](http://wiki.debian.org/qa.debian.org/pts/RdfInterface)
