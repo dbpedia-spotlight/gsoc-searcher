@@ -31,9 +31,9 @@ provided by [Ohloh](http://www.ohloh.net/). RDFohloh is an Open Source
 project, whose code may be downloaded from 
 [the Google Code project](https://code.google.com/p/rdfohloh/).
 
-The current links were manually created, though it should be possible to
-automatically generate links using Ohloh's API, perhaps by querying for
-the project homepage.
+The current links were manually created. Ohloh provides an API, but it is 
+limited, and only allows searching for projects based on name, description, 
+and tags, so query by homepage is not possible. 
 
 ### dbpedia-debian.nt
 
