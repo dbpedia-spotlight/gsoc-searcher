@@ -1,5 +1,6 @@
 import os.path
 import csv
+import codecs
 import re
 import urllib
 import urllib2
@@ -10,6 +11,7 @@ from boilerpipe.extract import Extractor
 
 csvInput = sys.argv[1]
 DATA_DIR = "data"
+CHUNKS_SIZE = 300
 
 ns = "http://spotlight.dbpedia.org/gsoc/vocab#"
 objectProperty = ns + "tagged"
@@ -56,6 +58,9 @@ def iterGsoc(csvFileName):
             linkId = els[2]
             tags = [t.replace("_", " ").strip() for t in els[3:-1][0].split(",")]
             ideasUrl = els[-1]
+
+            if not key.strip() or not ideasUrl.strip():
+                continue
 
             yield (key, name, linkId, tags, ideasUrl)
 
@@ -115,21 +120,36 @@ def saveDisambigTags(path, tags):
     for uri in uris:
         save(path, serializer(ideasUrl, objectProperty, uri))
 
+def _chunk(seq, size):
+    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
 def saveTextEntities(path, ideasUrl):
     """Disambiguated entities from the ideas page.
     """
     try:
         url = urlPrefixSpotlight + "&url=" + ideasUrl
         uris = _urisFromUrl(url)
-    except urllib2.HTTPError:
+    except (urllib2.HTTPError, socket.timeout) as e:
         sys.stderr.write("    produced HTTPError\n")
-        extractor = Extractor(extractor='ArticleExtractor', url=ideasUrl)
-        text = urllib.quote_plus(extractor.getText().replace("\n", "  ").encode("utf-8"))
-        postParams = urllib.urlencode({"text": text}) 
-        try:
-            uris = _urisFromUrl(urlPrefixSpotlight, timeout=120, data=postParams)
-        except socket.timeout:
-            uris = ["timed out"]
+        textPath = path.replace(".tmp", "") + ".text"
+        if os.path.isfile(textPath):
+            sys.stderr.write("      reading text from disk\n")
+            with codecs.open(textPath, "w") as textFile:
+                text = textFile.read()
+        else:
+            sys.stderr.write("      will do boilerplate and chunking\n")
+            extractor = Extractor(extractor='ArticleExtractor', url=ideasUrl)
+            text = extractor.getText().replace("\n", "  ").encode("utf-8")
+            with open(textPath, "w") as textFile:
+                textFile.write(text)
+
+        uris = []
+        for c in _chunk(re.split("\s+", text), CHUNKS_SIZE):
+            postParams = urllib.urlencode({"text": " ".join(c)}) 
+            try:
+                uris.extend(_urisFromUrl(urlPrefixSpotlight, timeout=120, data=postParams))
+            except socket.timeout:
+                sys.stderr.write("    query for chunk timed out\n")
 
     for uri in uris:
         save(path, serializer(ideasUrl, textTaggedProperty, uri))
