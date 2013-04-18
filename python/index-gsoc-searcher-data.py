@@ -15,7 +15,7 @@ TYPE_ID = "d"
 
 
 class RequestWithMethod(urllib2.Request):
-    """Hack for forcing the method in a request – allows PUT and DELETE
+    """Hack for forcing the method in a request - allows PUT and DELETE
     Ack: Eric S. Raymond
     http://benjamin.smedbergs.us/blog/2008-10-21/putting-and-deleteing-in-python-urllib2/#comment-430392
     """
@@ -47,7 +47,7 @@ def indexDataPoint(elasticSearchUrl, dataPoint):
     key, prop, val = dataPoint
     url = "%s/%s/%s/%s" % (elasticSearchUrl, INDEX_ID, TYPE_ID, analyzeKey(key))
     putJson = '{"%s":"%s"}' % (prop, val)
-    print "Indexing %s in %s" % (dataPoint, elasticSearchUrl)
+    print "Indexing in %s: %s" % (elasticSearchUrl, dataPoint)
     request = RequestWithMethod('PUT', url, data=putJson)
     answerJson = urllib2.urlopen(request).read()
     if not '"ok":true' in answerJson:
@@ -63,6 +63,5 @@ if __name__ == "__main__":
         elasticSearchUrl = re.sub("/$", "", sys.argv[2])
 
     for dataPoint in iterDataPoints(dataDir):
-        print dataPoint
         indexDataPoint(elasticSearchUrl, dataPoint)
 
