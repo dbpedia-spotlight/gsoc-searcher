@@ -273,11 +273,11 @@
     <ol>
 <li>Type-ahead suggestion is done via <a href="http://enable-cors.org">CORS-enabled</a> Ajax queries to <a href="http://lookup.dbpedia.org/">DBpedia Lookup</a>. This API takes in some phrase and searches the <a href="http://dbpedia.org">DBpedia</a> knowledge base to find possible meanings for this phrase. Once you pick one of those meanings, we store its unique identifier (URI) from DBpedia. The client side javascript uses <a href="http://code.drewwilson.com/entry/autosuggest-jquery-plugin">AutoSuggest jQuery Plugin by Drew Wilson</a>.
 <li>Suggestion of related concepts is done via <a href="http://wiki.dbpedia.org/Downloads37#wikipediapagelinks">DBpedia's wikiPageLinks</a> and using <a href="http://wiki.dbpedia.org/spotlight/isem2011">DBpedia Spotlight's notion of resource relatedness</a>. For each of the URIs you have selected in step 1, we find all concepts linked to them via DBpedia properties. We add to that any other concepts that are "topically similar" according to DBpedia Spotlight.
+The wikiPageLinks dataset was loaded into a <a href="http://virtuoso.openlinksw.com">Virtuoso triple store</a>, in order to provide the "expand" functionality.
 <li>
 <!--Retrieval of projects is done via a <a href="http://www.w3.org/TR/rdf-sparql-query/">SPARQL query</a> over annotated projects stored in our <a href="http://spotlight.dbpedia.org/sparql">SPARQL endpoint</a>.-->
 Retrieval and ranking is done via queries over annotated projects stored in an <a href="http://www.elasticsearch.org">elasticsearch</a> server.
 Projects were annotated with <a href="http://wiki.dbpedia.org/spotlight/usersmanual">DBpedia Spotlight's Web Service</a>.
-The wikiPageLinks dataset of <a href="http://dbpedia.org">DBpedia</a> was loaded into a <a href="http://virtuoso.openlinksw.com">Virtuoso triple store</a>, in order to provide the "expand" functionality.
 <li>Results are displayed by the <a href="http://datatables.net/">DataTables jQuery plugin</a>.
    </ol>
 
