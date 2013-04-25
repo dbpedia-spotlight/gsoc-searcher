@@ -4,11 +4,10 @@
     <script src="js/jquery.autoSuggest.js" type="text/javascript"></script>
     <script src="js/querier.js" type="text/javascript"></script>
     <script src="http://datatables.net/release-datatables/media/js/jquery.dataTables.js" type="text/javascript"></script>
-    <!--script src="js/json2.js"></script-->
     <style type="text/css" title="currentStyle">
         @import "css/demo_page.css";
         @import "css/demo_table.css";
-        @import "css/header.ccss";
+        @import "css/header.css";
     </style>
     <style>
         #copyright { font-size: 9px; text-align: center}
@@ -17,22 +16,28 @@
     <link rel="stylesheet" type="text/css" href="css/autoSuggest.css" />
     <script>
         var settings = {
-            'elastic_search_root_url' : 'http://localhost:9200/gsoc2013/d/',  // must include index and type
-            'lookup_php_url' : 'http://localhost/dbpedia-spotlight-gsoc/lookup.php'
+            'dbpedia_lookup_url' : 'http://lookup.dbpedia.org/api/search/KeywordSearch',
+            'elastic_search_root_url' : 'http://localhost:9200/gsoc2013/d/'  // must include index and type
         };
 
         $(document).ready(function() {
-            $("#keywords").autoSuggest(settings.lookup_php_url, {
+            $("#keywords").autoSuggest(settings.dbpedia_lookup_url, {
                     minChars: 2,
                     matchCase: false,
                     queryParam: "QueryString",
-                    selectedItemProp: "Label",
-                    searchObjProps: "Label",
-                    selectedValuesProp: "URI",
+                    selectedItemProp: "label",
+                    searchObjProps: "label",
+                    selectedValuesProp: "uri",
                     startText: "Enter keywords...",
                     emptyText: "No topics found for that phrase.",
-                    beforeRetrieve: function(s){return s.replace(/\+/g, "\\\+");} }); }
-        );
+                    beforeRetrieve: function(s) {
+                        return s.replace(/\+/g, "\\\+");
+                    },
+                    retrieveComplete: function(data) {
+                        return data.results;
+                    }
+            });
+        });
         //$("input").autoSuggest(data.items, {selectedItemProp: "URI", searchObjProps: "Label", startText: "Enter keywords" });
 
         function expand() {
@@ -163,14 +168,14 @@
     
     <style type="text/css" media="screen">
         #banner {
-            background: url('images/bg_gsoc.jpg') #bee6f2 repeat-x;
+            background: url('images/bg_gsoc2013.jpg') #bee6f2 repeat-x;
             text-align: center;
             border-bottom: 2px solid #69a3b4;
             -moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
             -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
             margin-bottom: 3em;
-            height: 323px;
+            height: 375px;
         }
         h1 {
            margin-bottom: 0.5em;
@@ -237,7 +242,7 @@
 <body>
     
     <div id="banner">
-        <img src="images/logo_gsoc.jpg" /> 
+        <img src="images/logo_gsoc2013.jpg" /> 
      </div>
 
     <div class="warning" style="display:none">We are experiencing technical difficulties with our server. Please check back in a couple of hours.</div>
@@ -269,7 +274,7 @@
 <h2>4. Wanna know how this has been done?</h2>
 <div id="explanation">
 
-<p>If you are curious about how we implemented this app, feel free to check our <a href="https://github.com/pablomendes/dbpedia-spotlight-gsoc">source code</a>.  
+<p>If you are curious about how we implemented this app, feel free to check our <a href="https://github.com/dbpedia-spotlight/dbpedia-spotlight-gsoc">source code</a>.  
     <ol>
 <li>Type-ahead suggestion is done via <a href="http://enable-cors.org">CORS-enabled</a> Ajax queries to <a href="http://lookup.dbpedia.org/">DBpedia Lookup</a>. This API takes in some phrase and searches the <a href="http://dbpedia.org">DBpedia</a> knowledge base to find possible meanings for this phrase. Once you pick one of those meanings, we store its unique identifier (URI) from DBpedia. The client side javascript uses <a href="http://code.drewwilson.com/entry/autosuggest-jquery-plugin">AutoSuggest jQuery Plugin by Drew Wilson</a>.
 <li>Suggestion of related concepts is done via <a href="http://wiki.dbpedia.org/Downloads37#wikipediapagelinks">DBpedia's wikiPageLinks</a> and using <a href="http://wiki.dbpedia.org/spotlight/isem2011">DBpedia Spotlight's notion of resource relatedness</a>. For each of the URIs you have selected in step 1, we find all concepts linked to them via DBpedia properties. We add to that any other concepts that are "topically similar" according to DBpedia Spotlight.
@@ -277,11 +282,11 @@ The wikiPageLinks dataset was loaded into a <a href="http://virtuoso.openlinksw.
 <li>
 <!--Retrieval of projects is done via a <a href="http://www.w3.org/TR/rdf-sparql-query/">SPARQL query</a> over annotated projects stored in our <a href="http://spotlight.dbpedia.org/sparql">SPARQL endpoint</a>.-->
 Retrieval and ranking is done via queries over annotated projects stored in an <a href="http://www.elasticsearch.org">elasticsearch</a> server.
-Projects were annotated with <a href="http://wiki.dbpedia.org/spotlight/usersmanual">DBpedia Spotlight's Web Service</a>.
+Projects were annotated with <a href="https://github.com/dbpedia-spotlight/dbpedia-spotlight/wiki/User's-manual">DBpedia Spotlight's Web Service</a>.
 <li>Results are displayed by the <a href="http://datatables.net/">DataTables jQuery plugin</a>.
    </ol>
 
-<p>DBpedia Spotlight <a href="http://www.google-melange.com/gsoc/org/google/gsoc2013/dbpediaspotlight">has been selected as an organization</a> for GSoC2013. If you have <a href="http://wiki.dbpedia.org/gsoc2013/ideas">project ideas</a> involving DBpedia Spotlight, please let us know. Chat with us on Freenode's #dbpedia-spotlight, or through our <a href="https://lists.sourceforge.net/lists/listinfo/dbp-spotlight-developers">discussion list at SourceForge.net</a>.</p>
+<p>DBpedia and DBpedia Spotlight <a href="http://www.google-melange.com/gsoc/org/google/gsoc2013/dbpediaspotlight">has been selected as an organization</a> for GSoC2013. If you have <a href="http://wiki.dbpedia.org/gsoc2013/ideas">project ideas</a> involving DBpedia or DBpedia Spotlight, please let us know, for example through our <a href="https://lists.sourceforge.net/lists/listinfo/dbpedia-gsoc">discussion list at SourceForge.net</a>.</p>
 
 </div>
 <div id="stats">
