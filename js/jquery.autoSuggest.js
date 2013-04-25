@@ -234,12 +234,26 @@
 							if(opts.beforeRetrieve){
 								string = opts.beforeRetrieve.call(this, string);
 							}
-							$.getJSON(req_string+"?"+opts.queryParam+"="+encodeURIComponent(string)+limit+opts.extraParams, function(data){ 
-								d_count = 0;
-								var new_data = opts.retrieveComplete.call(this, data);
-								for (k in new_data) if (new_data.hasOwnProperty(k)) d_count++;
-								processData(new_data, string); 
-							});
+
+                            // -----------------------------------------------------------------------
+                            // changed
+                            var url = req_string+"?"+opts.queryParam+"="+encodeURIComponent(string)+limit+opts.extraParams;
+                            $.ajax({
+                                beforeSend: function(xhrObj) {
+                                    xhrObj.setRequestHeader("Accept","application/json");
+                                },
+                                dataType: "json",
+                                url: url,
+                                success: function(data){ 
+                                    d_count = 0;
+                                    var new_data = opts.retrieveComplete.call(this, data);
+                                    for (k in new_data) if (new_data.hasOwnProperty(k)) d_count++;
+                                    processData(new_data, string); 
+                                }
+                            });
+                            // changed
+                            // -----------------------------------------------------------------------
+
 						} else {
 							if(opts.beforeRetrieve){
 								string = opts.beforeRetrieve.call(this, string);
