@@ -17,7 +17,8 @@
     <script>
         var settings = {
             'dbpedia_lookup_url' : 'http://lookup.dbpedia.org/api/search/KeywordSearch',
-            'elastic_search_root_url' : 'http://localhost:9200/gsoc2013/d/'  // must include index and type
+            'elastic_search_root_url' : 'http://193.225.89.3:9200/gsoc2013/d/',  // must include index and type
+            'spotlight_related_url' : 'http://spotlight.dbpedia.org/related/'
         };
 
         $(document).ready(function() {
@@ -41,11 +42,10 @@
         //$("input").autoSuggest(data.items, {selectedItemProp: "URI", searchObjProps: "Label", startText: "Enter keywords" });
 
         function expand() {
-            var url = "http://spotlight.dbpedia.org/related/";
             var uriList = getInputConcepts();
             var data = {"uri": uriList.join(" "),
                         "n": 20 }
-            $.get(url, data, suggest, "json")
+            $.get(settings.spotlight_related_url, data, suggest, "json")
         }
 
         function uriToLabel(uri) {
@@ -117,12 +117,23 @@
 
         function search(concepts) {
             var url = settings.elastic_search_root_url + '_search'
-            var field = 'tagged';
-            var luceneQuery = field + ':"' + concepts.join('" OR ' + field + ':"') + '"'
+            var fields = ['tagged', 'textTagged'];
+            var qArray = [];
+            $.each(fields, function(i, field) {
+                $.each(concepts, function(j, concept) {
+                    qArray.push(field + ':"' + concept + '"');
+                })
+            });
+            var luceneQuery = qArray.join(' OR ');
+            var data = {
+                q : luceneQuery,
+                from : 0,
+                size : 300   // all results at once
+            };
             $.ajax({
                 type: 'GET',
                 url: url,
-                data: {q : luceneQuery},
+                data: data,
                 success: update,
                 dataType: "json"
             })
