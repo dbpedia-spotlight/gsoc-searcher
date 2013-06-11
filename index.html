@@ -285,7 +285,7 @@
 <h2>4. Wanna know how this has been done?</h2>
 <div id="explanation">
 
-<p>If you are curious about how we implemented this app, feel free to check our <a href="https://github.com/dbpedia-spotlight/dbpedia-spotlight-gsoc">source code</a>.  
+<p>If you are curious about how we implemented this app, feel free to check our <a href="https://github.com/dbpedia-spotlight/gsoc-searcher">source code</a>.  
     <ol>
 <li>Type-ahead suggestion is done via <a href="http://enable-cors.org">CORS-enabled</a> Ajax queries to <a href="http://lookup.dbpedia.org/">DBpedia Lookup</a>. This API takes in some phrase and searches the <a href="http://dbpedia.org">DBpedia</a> knowledge base to find possible meanings for this phrase. Once you pick one of those meanings, we store its unique identifier (URI) from DBpedia. The client side javascript uses <a href="http://code.drewwilson.com/entry/autosuggest-jquery-plugin">AutoSuggest jQuery Plugin by Drew Wilson</a>.
 <li>Suggestion of related concepts is done via <a href="http://wiki.dbpedia.org/Downloads37#wikipediapagelinks">DBpedia's wikiPageLinks</a> and using <a href="http://wiki.dbpedia.org/spotlight/isem2011">DBpedia Spotlight's notion of resource relatedness</a>. For each of the URIs you have selected in step 1, we find all concepts linked to them via DBpedia properties. We add to that any other concepts that are "topically similar" according to DBpedia Spotlight.
